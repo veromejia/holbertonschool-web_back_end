@@ -16,7 +16,7 @@ class Auth:
 
         if path[-1] is not '/':
             path += '/'
-        
+
         wildcards = [p[:-1] for p in excluded_paths if p[-1] == '*']
 
         for p in wildcards:
