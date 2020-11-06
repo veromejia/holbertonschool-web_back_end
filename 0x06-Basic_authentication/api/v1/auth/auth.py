@@ -16,6 +16,12 @@ class Auth:
 
         if path[-1] is not '/':
             path += '/'
+        
+        wildcards = [p[:-1] for p in excluded_paths if p[-1] == '*']
+
+        for p in wildcards:
+            if path.startswith(p):
+                return False
 
         return False if path in excluded_paths else True
 
