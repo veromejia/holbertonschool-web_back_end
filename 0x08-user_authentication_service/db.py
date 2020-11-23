@@ -12,11 +12,11 @@ from user import Base, User
 
 
 class DB:
-    """ DB class """
+    """DB class"""
 
     def __init__(self):
         """initialization"""
-        self._engine = create_engine("sqlite:///a.db", echo=True)
+        self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -37,31 +37,30 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs) -> User:
+    def find_user_by(self, **user_table) -> User:
         """Return matching User instance"""
-        if not kwargs:
+        if not user_table:
             raise InvalidRequestError
 
-        valid_columns = ['id', 'email', 'hashed_password', 'session_id',
-                         'reset_token']
-        for key in kwargs:
-            if key not in valid_columns:
+        fields = ['id', 'email', 'hashed_password',
+                  'session_id', 'reset_token']
+
+        for arg in user_table:
+            if arg not in fields:
                 raise InvalidRequestError
-
-        found_user = self._session.query(User).filter_by(**kwargs).first()
-        if found_user is None:
+        user = self._session.query(User).filter_by(**user_table).first()
+        if not user:
             raise NoResultFound
-        return found_user
+        return user
 
-    def update_user(self, user_id: str, **kwargs) -> None:
+    def update_user(self, user_id: int, **user_table) -> None:
         """Update user information"""
         user = self.find_user_by(id=user_id)
 
         fields = ['id', 'email', 'hashed_password',
                   'session_id', 'reset_token']
-        for key, val in kwargs.items():
+        for key, value in user_table.items():
             if key not in fields:
                 raise ValueError
-            setattr(user, key, val)
-
+            setattr(user, key, value)
         self._session.commit()
