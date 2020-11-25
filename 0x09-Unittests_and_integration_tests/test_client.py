@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""Unit tests for client module"""
+
 import unittest
 from unittest import mock
 from unittest.mock import PropertyMock, Mock
