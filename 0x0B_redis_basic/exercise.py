@@ -2,7 +2,7 @@
 """Redis exercises module"""
 import redis
 import uuid
-from typing import Union, Callable, Any, Optional
+from typing import Union, Callable, Optional, List
 from functools import wraps
 
 
@@ -75,3 +75,17 @@ class Cache:
             return fn(self._redis.get(key))
         else:
             return self._redis.get(key)
+
+    def get_str(self, b_string: bytes) -> str:
+        """ Convert bytes to str """
+        return b_string.decode('utf-8')
+
+    def get_int(self, b_int: bytes) -> int:
+        """ Convert bytes to int """
+        result = 0
+        result = result * 256 + int(b_int)
+        return result
+
+    def get_list(self, k: str) -> List:
+        """ Convert bytes from store to list """
+        return self._redis.lrange(k, 0, -1)
