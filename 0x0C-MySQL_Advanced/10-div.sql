@@ -3,18 +3,19 @@
 DELIMITER $ $ 
 DROP FUNCTION IF EXISTS SafeDiv;
 
-CREATE FUNCTION SafeDiv (a INT, b INT) RETURNS FLOAT BEGIN DECLARE div FLOAT;
+CREATE FUNCTION SafeDiv (a INT, b INT) 
+RETURNS FLOAT BEGIN DECLARE result FLOAT;
 
 IF b = 0 THEN
 SET
-    div = 0;
+    result = 0;
 
 ELSE
 SET
-    div = a / b;
+    result = a / b;
 
 END IF;
 
-RETURN div;
+RETURN result;
 
 END $ $
